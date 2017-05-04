@@ -1,6 +1,8 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
 module.exports = {
   context: resolve(__dirname, 'src'),
 
@@ -39,6 +41,7 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({ 'NODE_ENV' : JSON.stringify(NODE_ENV) }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
   ],

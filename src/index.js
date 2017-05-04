@@ -1,25 +1,22 @@
+// Modules
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { Router, hashHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
-import { AppContainer } from 'react-hot-loader';
-// AppContainer is a necessary wrapper component for HMR
+import routes from './routes';
+import { configureStore } from './configure-store';
 
-import App from './components/App';
+const store = configureStore();
+const historyOptions = [ hashHistory, store, { adjustUrlOnReplay: false } ];
+const history = syncHistoryWithStore(...historyOptions);
 
-const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component/>
-    </AppContainer>,
-    document.getElementById('root')
-  );
-};
-
-render(App);
-
-// Hot Module Replacement API
-if (module.hot) {
-  module.hot.accept('./components/App', () => {
-    render(App)
-  });
-}
+ReactDOM.render(
+    <Provider store={ store }>
+        <Router history={ history }>
+            { routes }
+        </Router>
+    </Provider>,
+  document.getElementById('root')
+);
